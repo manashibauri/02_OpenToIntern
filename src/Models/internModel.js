@@ -22,7 +22,7 @@ const InternSchema = new mongoose.Schema(
                ref: "P-College",
           },
           isDeleted: {
-               type: boolean,
+               type: Boolean,
                default: false
           }
      },

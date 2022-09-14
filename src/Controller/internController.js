@@ -1,25 +1,64 @@
-const InternModel= require('../Models/internModel')
+const mongoose = require("mongoose");
+const InternModel = require('../Models/internModel')
+const VALIDATOR = require('../validator/validation')
+const CollegeModel = require('../Models/collegeModel')
+// ----------------------------------------------create intern--------------------------------------------------------------
+const createIntern = async function (req, res) {
+    try {
+        let data = req.body
+        let clgName = data.collegeName
+        if (Object.keys(data).lenght == 0)
+            return res.status(400).send({ status: false, msg: "please provide atleast one key" })
+
+        if (!clgName)
+            return res.status(400).send({ status: false, msg: "collegeName is required" })
+
+        if (!data.name)
+            return res.status(400).send({ status: false, msg: "name is required" })
+
+        if (!data.email)
+            return res.status(400).send({ status: false, msg: "email is required" })
+
+        if (!data.mobile)
+            return res.status(400).send({ status: false, msg: "mobile is required" })
+
+        let name = data.name
+        if (!VALIDATOR.validChar(name))
+            return res.status(400).send({ status: false, msg: "name should be a alphabet" })
+
+        let email = data.email
+        if (!VALIDATOR.isValidEmail(email))
+            return res.status(400).send({ status: false, msg: "email should be a valid" })
+
+        let mobile = data.mobile
+        if (!VALIDATOR.validanumber(mobile))
+            return res.status(400).send({ status: false, msg: "mobile should be a valid" })
+
+        if (!VALIDATOR.validChar(clgName))
+            return res.status(400).send({ status: false, msg: "clgName should be a alphabet" })
 
 
-const createIntern= async function (req,res){
-    try{
-         let data= req.body
-         let interndata= await InternModel.create(data)
-         res.status(201).send({status:true,data:interndata, msg:"data created"})
+        let clgData = await CollegeModel.findOne({ name: clgName }).select({ _id: 1 })//{id:8787879999999995557 }
+        let clgId = clgData._id
+
+
+        if (!clgData) { return res.status(404).send({ status: false, msg: "data not found" }) }
+        data["collegeId"] = clgId
+
+        if (!VALIDATOR.isValidObjectId(clgId))
+            return res.status(400).send({ status: false, msg: "clg id should be a valid" })
+
+
+        console.log("created")
+        let saveData = await InternModel.create(data)
+
+        res.status(201).send({ status: true, data: saveData, msg: "data is created" })
+
     }
-    catch(err){
-        res.status(500).send({status:false, msg: err.message})
+    catch (err) {
+        res.status(500).send({ status: false, error: err.message })
     }
 }
 
+module.exports.createIntern = createIntern
 
-module.exports.createIntern=createIntern
-
-// POST /functionup/interns
-// Create a document for an intern.
-
-// Also save the collegeId along with the document. Your request body contains the following fields - { name, mobile, email, collegeName}
-
-// Return HTTP status 201 on a succesful document creation. Also return the document. The response should be a JSON object like this
-
-// Return HTTP status 400 for an invalid request with a response body like this
