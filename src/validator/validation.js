@@ -13,14 +13,14 @@ const isValidEmail = function (value)   {
 
 //----------------------------------validation for name and fullName (* only aplphabet)-----------------------------------
 
-const validChar = function (value) {
-    if (/^[a-zA-Z ]{2,30}$/.test(value)) {
-        return true
-    } else {
-        return false
-    }
-}
-// -----------------------------------valiadtion for number-------------------------------------------
+// const validChar = function (value) {
+//     if (/^[a-zA-Z ]{2,30}$/.test(value)) {
+//         return true
+//     } else {
+//         return false
+//     }
+// }
+// -----------------------------------valiadtion for number-------------------------------------------/^[a-zA-Z ]{2,30}$/
 // =--------------------------------no /, /space/+/only 10 digit----------------------------------------------------
 
 const validanumber = function (value) {
@@ -38,7 +38,14 @@ const validurl= function (value){
         return false
     }
 }
-
+const validChar = function (value) {
+    if (typeof value !== "string" || value.trim() == "") { return false }
+    else {
+        var isValid = /[/^[a-zA-Z ]{2,30}$/;
+        // console.log(value.trim());
+        return isValid.test(value.trim());
+    }
+}
 
 
 

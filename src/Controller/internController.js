@@ -37,13 +37,14 @@ const createIntern = async function (req, res) {
         if (!VALIDATOR.validChar(clgName))
             return res.status(400).send({ status: false, msg: "clgName should be a alphabet" })
 
+         
+         let clgData = await CollegeModel.findOne({ fullName: clgName })//{id:8787879999999995557 }
+       
 
-        let clgData = await CollegeModel.findOne({ fullName: clgName }).select({ _id: 1 })//{id:8787879999999995557 }
-        let clgId = clgData._id
 
-
-        if (!clgData) { return res.status(404).send({ status: false, msg: "data not found" }) }
-        data["collegeId"] = clgId
+        if (!clgData) 
+        { return res.status(404).send({ status: false, msg: "data not found" }) }
+        data["collegeId"] = clgData._id.toString();
 
         
 
