@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+
 const InternModel = require('../Models/internModel')
 const VALIDATOR = require('../validator/validation')
 const CollegeModel = require('../Models/collegeModel')
@@ -38,27 +38,39 @@ const createIntern = async function (req, res) {
             return res.status(400).send({ status: false, msg: "clgName should be a alphabet" })
 
 
-        let clgData = await CollegeModel.findOne({ name: clgName }).select({ _id: 1 })//{id:8787879999999995557 }
+        let clgData = await CollegeModel.findOne({ fullName: clgName }).select({ _id: 1 })//{id:8787879999999995557 }
         let clgId = clgData._id
 
 
         if (!clgData) { return res.status(404).send({ status: false, msg: "data not found" }) }
         data["collegeId"] = clgId
 
-        if (!VALIDATOR.isValidObjectId(clgId))
-            return res.status(400).send({ status: false, msg: "clg id should be a valid" })
+        
 
+        let isemailAlreadyUsed = await InternModel.findOne({ email });
+        if (isemailAlreadyUsed) {
+            res.status(400).send({ status: false, message: `${email}  intern email is already registered`, });
+            return;
+              }
 
-        console.log("created")
-        let saveData = await InternModel.create(data)
+        let ismobileAlreadyUsed = await InternModel.findOne({ mobile });
+        if (ismobileAlreadyUsed) {
+            res.status(400).send({ status: false, message: `${mobile}  intern  mobile is already registered`, });
+            return;
+              }
 
-        res.status(201).send({ status: true, data: saveData, msg: "data is created" })
+          let saveData = await InternModel.create(data)
+         res.status(201).send({ status: true, data: saveData, msg: "data is created" })
 
     }
     catch (err) {
         res.status(500).send({ status: false, error: err.message })
     }
-}
+    }
+    
+    
 
-module.exports.createIntern = createIntern
+
+
+module.exports.createIntern = createIntern  
 

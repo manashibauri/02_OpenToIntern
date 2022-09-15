@@ -30,9 +30,9 @@ const validanumber = function (value) {
         return false
     }
 }
-// -------------------------------validation for url-(https/ // / png)------------------------------------------------------------
+// -------------------------------validation for url-(https/ //)------------------------------------------------------------
 const validurl= function (value){
-    if (/(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/.test(value)){
+    if (/(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/.test(value)) {
         return true
     }else {
         return false
@@ -45,7 +45,6 @@ const validurl= function (value){
 
 module.exports.isValidObjectId = isValidObjectId
 module.exports.isValidEmail = isValidEmail
-
 module.exports.validChar = validChar
 module.exports.validanumber = validanumber
 module.exports.validurl = validurl
